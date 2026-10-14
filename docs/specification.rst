@@ -50,8 +50,9 @@ Encoding and common types
   Decision IDs MUST be globally unique; UUID URNs are RECOMMENDED.
   Actor IDs SHOULD be stable pseudonymous identifiers, not email addresses.
 * Timestamps MUST be RFC 3339 date-times with an explicit UTC offset.
-  Producers SHOULD use UTC with ``Z`` and SHOULD avoid leap-second values
-  for portability. Consumers MUST compare instants, not timestamp strings.
+  Leap-second values MUST NOT be used, for validator interoperability.
+  Producers SHOULD use UTC with ``Z``.
+  Consumers MUST compare instants, not timestamp strings.
   No fixed subsecond precision is required.
 * Integers and counters MUST be within the inclusive range
   -9007199254740991 to 9007199254740991; counters are nonnegative.

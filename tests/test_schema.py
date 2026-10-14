@@ -121,6 +121,29 @@ class DecisionSchemaTests(unittest.TestCase):
         self.record["context"] = {"trace_id": "a" * 32}
         self.validator.validate(self.record)
 
+    def test_all_timestamp_fields_forbid_leap_seconds(self):
+        paths = (
+            ("time",),
+            ("observed_time",),
+            ("ai", "invocations", 0, "started_at"),
+            ("ai", "invocations", 0, "ended_at"),
+            ("governance", "approvals", 0, "time"),
+        )
+        for path in paths:
+            with self.subTest(path=path):
+                record = load_example("hybrid-decided.json")
+                target = record
+                for key in path[:-1]:
+                    target = target[key]
+                target[path[-1]] = "2016-12-31T23:59:60Z"
+                self.assertInvalid(record)
+
+    def test_timestamp_offsets_and_fractional_seconds(self):
+        for value in ("2026-10-14T14:00:00+02:00", "2026-10-14t12:00:00.123456z"):
+            with self.subTest(time=value):
+                self.record["time"] = value
+                self.validator.validate(self.record)
+
     def test_unknown_core_fields_and_nulls(self):
         for path in ((), ("resource",), ("decision",), ("instrumentation_scope",)):
             with self.subTest(path=path):
