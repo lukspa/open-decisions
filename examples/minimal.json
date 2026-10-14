@@ -1,0 +1,22 @@
+{
+  "schema_version": "0.1.0",
+  "id": "urn:uuid:581d6ebb-255c-4f45-b764-49a6e934ea92",
+  "revision": 1,
+  "time": "2026-10-14T12:00:00Z",
+  "name": "support.route",
+  "kind": "human",
+  "status": "decided",
+  "resource": { "service_name": "support-console" },
+  "instrumentation_scope": { "name": "example.support" },
+  "actors": [
+    { "id": "operator:17", "type": "human", "roles": ["decider"] }
+  ],
+  "decision": {
+    "question": "Which queue should handle this request?",
+    "options": [
+      { "id": "billing", "label": "Billing" },
+      { "id": "technical", "label": "Technical support" }
+    ],
+    "selected_option_ids": ["technical"]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schema_version": "0.1.0",
+  "id": "urn:uuid:5689a7f0-9589-4999-9a52-60640657914a",
+  "revision": 2,
+  "time": "2026-10-14T12:04:00Z",
+  "name": "change.approve",
+  "kind": "hybrid",
+  "status": "decided",
+  "resource": { "service_name": "change-review" },
+  "instrumentation_scope": { "name": "example.change-review" },
+  "actors": [
+    { "id": "agent:reviewer", "type": "ai_agent", "roles": ["proposer"] },
+    { "id": "operator:reviewer", "type": "human", "roles": ["decider", "reviewer"] }
+  ],
+  "decision": {
+    "question": "Should this change be approved?",
+    "options": [
+      { "id": "approve", "label": "Approve" },
+      { "id": "reject", "label": "Reject" }
+    ],
+    "selected_option_ids": ["approve"],
+    "reason": "The human reviewer approved the agent's recommendation."
+  },
+  "ai": {
+    "invocations": [
+      {
+        "id": "invocation:review",
+        "actor_id": "agent:reviewer",
+        "purpose": "evaluation",
+        "status": "completed",
+        "provider": "example-provider",
+        "model": { "name": "example-reviewer" }
+      }
+    ]
+  },
+  "governance": {
+    "approvals": [
+      { "actor_id": "operator:reviewer", "status": "approved", "time": "2026-10-14T12:04:00Z" }
+    ]
+  }
+}
