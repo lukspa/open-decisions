@@ -113,7 +113,7 @@
               "uri": { "type": "string", "format": "uri" },
               "description": { "$ref": "#/$defs/text" },
               "media_type": { "$ref": "#/$defs/text" },
-              "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}(?![\\s\\S])" },
               "attributes": { "$ref": "#/$defs/attributes" }
             }
           }
@@ -145,8 +145,8 @@
       "additionalProperties": false,
       "dependentRequired": { "span_id": ["trace_id"] },
       "properties": {
-        "trace_id": { "type": "string", "pattern": "^(?!0{32}$)[0-9a-f]{32}$" },
-        "span_id": { "type": "string", "pattern": "^(?!0{16}$)[0-9a-f]{16}$" },
+        "trace_id": { "type": "string", "pattern": "^(?!0{32})[0-9a-f]{32}(?![\\s\\S])" },
+        "span_id": { "type": "string", "pattern": "^(?!0{16})[0-9a-f]{16}(?![\\s\\S])" },
         "correlation_id": { "$ref": "#/$defs/id" }
       }
     },
@@ -292,13 +292,13 @@
     }
   ],
   "$defs": {
-    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@-]{0,255}$" },
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:/@-]{0,255}(?![\\s\\S])" },
     "text": { "type": "string", "minLength": 1 },
     "count": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
     "attributes": {
       "type": "object",
       "propertyNames": {
-        "pattern": "^[a-z][a-z0-9_-]*(\\.[a-z][a-z0-9_-]*)+$",
+        "pattern": "^[a-z][a-z0-9_-]*(\\.[a-z][a-z0-9_-]*)+(?![\\s\\S])",
         "maxLength": 256
       },
       "additionalProperties": { "$ref": "#/$defs/value" }

@@ -86,7 +86,7 @@ class DecisionSchemaTests(unittest.TestCase):
         for field, values in {
             "schema_version": ["0.2.0", 1],
             "revision": [0, -1, 1.5, True, 9007199254740992],
-            "id": ["", "contains spaces", "x" * 257],
+            "id": ["", "contains spaces", "x" * 257, "id\n"],
             "kind": ["llm"],
             "status": ["approved"],
         }.items():
@@ -111,7 +111,9 @@ class DecisionSchemaTests(unittest.TestCase):
             {"trace_id": "0" * 32},
             {"trace_id": "A" * 32},
             {"trace_id": "a" * 31},
+            {"trace_id": "a" * 32 + "\n"},
             {"trace_id": "a" * 32, "span_id": "0" * 16},
+            {"trace_id": "a" * 32, "span_id": "a" * 16 + "\n"},
         ):
             with self.subTest(context=context):
                 self.record["context"] = context
@@ -139,6 +141,7 @@ class DecisionSchemaTests(unittest.TestCase):
         for attributes in (
             {"unnamespaced": 1},
             {"Org.Example": 1},
+            {"org.example.key\n": 1},
             {"org.example.large": 9007199254740992},
             {"org.example.nested": {"large": -9007199254740992}},
         ):
@@ -149,6 +152,16 @@ class DecisionSchemaTests(unittest.TestCase):
     def test_duplicate_selection(self):
         self.record["decision"]["selected_option_ids"] = ["technical", "technical"]
         self.assertInvalid(self.record)
+
+    def test_evidence_digest_is_exactly_64_hex_characters(self):
+        record = load_example("ai-agent.json")
+        evidence = record["decision"]["evidence"][0]
+        evidence["sha256"] = "a" * 64
+        self.validator.validate(record)
+        for value in ("a" * 63, "A" * 64, "a" * 64 + "\n"):
+            with self.subTest(digest=value):
+                evidence["sha256"] = value
+                self.assertInvalid(record)
 
     def test_ai_usage_and_confidence_bounds(self):
         for field in ("input_tokens", "output_tokens", "cached_input_tokens", "reasoning_output_tokens"):
