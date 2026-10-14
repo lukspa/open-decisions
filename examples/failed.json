@@ -1,0 +1,27 @@
+{
+  "schema_version": "0.1.0",
+  "id": "urn:uuid:7c16be62-633f-461f-b683-29775c81d530",
+  "revision": 1,
+  "time": "2026-10-14T12:05:00Z",
+  "name": "inventory.choose_supplier",
+  "kind": "automated",
+  "status": "failed",
+  "resource": { "service_name": "procurement" },
+  "instrumentation_scope": { "name": "example.procurement" },
+  "actors": [
+    { "id": "service:procurement", "type": "service", "roles": ["decider"] }
+  ],
+  "decision": {
+    "question": "Which supplier should fulfill the request?",
+    "options": [],
+    "error": { "code": "supplier_data_unavailable", "retryable": true },
+    "reason": "The supplier catalog was unavailable; no selection was made."
+  },
+  "links": [
+    {
+      "decision_id": "urn:uuid:54666008-28c1-423f-a614-2e652b06a511",
+      "revision": 1,
+      "relationship": "related_to"
+    }
+  ]
+}

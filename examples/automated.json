@@ -1,0 +1,39 @@
+{
+  "schema_version": "0.1.0",
+  "id": "urn:uuid:54666008-28c1-423f-a614-2e652b06a511",
+  "revision": 1,
+  "time": "2026-10-14T12:01:00+00:00",
+  "observed_time": "2026-10-14T12:01:01Z",
+  "name": "deployment.select_regions",
+  "kind": "automated",
+  "status": "decided",
+  "resource": {
+    "service_name": "deployment-controller",
+    "service_namespace": "platform",
+    "service_instance_id": "controller:2",
+    "attributes": { "deployment.environment.name": "staging" }
+  },
+  "instrumentation_scope": { "name": "example.deployments", "version": "1.0.0" },
+  "actors": [
+    { "id": "service:placement", "type": "service", "roles": ["decider"], "version": "3.2.0" }
+  ],
+  "decision": {
+    "question": "Which regions meet the placement policy?",
+    "options": [
+      { "id": "region-a", "label": "Region A" },
+      { "id": "region-b", "label": "Region B" },
+      { "id": "region-c", "label": "Region C" }
+    ],
+    "selected_option_ids": ["region-a", "region-c"],
+    "reason": "Both selected regions satisfy the capacity and residency constraints.",
+    "criteria": [
+      { "id": "residency", "description": "Stay within approved locations." }
+    ]
+  },
+  "governance": {
+    "policies": [
+      { "id": "policy:residency", "version": "2", "result": "pass" }
+    ]
+  },
+  "attributes": { "example.request.id": "deployment:45" }
+}

@@ -1,0 +1,80 @@
+{
+  "schema_version": "0.1.0",
+  "id": "urn:uuid:b6f16481-ce5a-40e7-a461-680dcb293404",
+  "revision": 1,
+  "time": "2026-10-14T12:02:03Z",
+  "name": "support.route",
+  "kind": "ai",
+  "status": "decided",
+  "resource": { "service_name": "routing-agent" },
+  "instrumentation_scope": { "name": "example.agent-adapter", "version": "1.0.0" },
+  "actors": [
+    {
+      "id": "agent:router",
+      "type": "ai_agent",
+      "roles": ["decider"],
+      "name": "Support router",
+      "version": "2.0.0"
+    }
+  ],
+  "decision": {
+    "question": "Which queue should handle this request?",
+    "options": [
+      { "id": "billing", "label": "Billing" },
+      { "id": "technical", "label": "Technical support" }
+    ],
+    "selected_option_ids": ["technical"],
+    "reason": "The request concerns a product configuration issue.",
+    "evidence": [
+      {
+        "id": "routing-guide",
+        "uri": "https://example.org/policies/routing/v2",
+        "media_type": "text/plain",
+        "description": "Versioned routing policy; no request contents are included."
+      }
+    ],
+    "confidence": {
+      "value": 0.86,
+      "method": "self_reported_uncalibrated",
+      "assessed_by": "agent:router"
+    }
+  },
+  "context": {
+    "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+    "span_id": "00f067aa0ba902b7",
+    "correlation_id": "request:42"
+  },
+  "ai": {
+    "invocations": [
+      {
+        "id": "invocation:1",
+        "actor_id": "agent:router",
+        "purpose": "selection",
+        "status": "completed",
+        "provider": "example-provider",
+        "model": { "name": "example-router", "version": "2026-09", "requested_name": "router-latest" },
+        "started_at": "2026-10-14T12:02:00Z",
+        "ended_at": "2026-10-14T12:02:02Z",
+        "parameters": { "gen_ai.request.temperature": 0 },
+        "usage": {
+          "input_tokens": 420,
+          "output_tokens": 36,
+          "cached_input_tokens": 120,
+          "reasoning_output_tokens": 0
+        },
+        "tools": [
+          { "id": "tool:1", "name": "lookup_routing_policy", "status": "completed", "duration_ms": 12.5 }
+        ],
+        "attributes": { "example.prompt.template.id": "support-router:v2" }
+      }
+    ]
+  },
+  "governance": {
+    "policies": [
+      { "id": "policy:routing", "version": "2", "result": "pass", "evidence_ids": ["routing-guide"] }
+    ]
+  },
+  "extensions": {
+    "org.example.routing": { "policy_revision": "2", "dry_run": true }
+  }
+}
